@@ -1,14 +1,14 @@
 int LEDON = LOW;
 int LEDOFF = HIGH;
 
-int sensorPin = A0; //Kosteusanturin pinni 
-int led = 13; //Ledin pinni
-int thresholdUp = 400; //Kosteusarvon yläraja -> pumppu kiinni
-int thresholdDown = 250; //Kosteusarvon alaraja -> pumppu päälle
+int sensorPin = A0;       //Kosteusanturin pinni 
+int led = 13;             //Ledin pinni
+int thresholdUp = 400;    //Kosteusarvon yläraja -> pumppu kiinni
+int thresholdDown = 300;  //Kosteusarvon alaraja -> pumppu päälle
 
 void setup() {
-  Serial.begin(9600); //
-  pinMode(led, OUTPUT); //
+  Serial.begin(9600); 
+  pinMode(led, OUTPUT); 
 }
 
 void loop() {
@@ -19,22 +19,22 @@ void loop() {
 
   Serial.println(sensorValue);
 
-  if(sensorValue <= thresholdDown){
+  if(sensorValue >= thresholdDown){
     
     //Määritetään viesti ja vilkku, kun kasvi tarvitsee vettä
     DisplayWords = "Kasvilla on jano!";                             
     digitalWrite(led, LEDON);   //Ledi päälle
-      delay(500);              //Sekunnin viive 
-    digitalWrite(led, LEDOFF); //Ledi pois päältä
-      delay(500);              //Sekunnin viive
+      delay(500);               //Sekunnin viive 
+    digitalWrite(led, LEDOFF);  //Ledi pois päältä
+      delay(500);               //Sekunnin viive
     Serial.print(DisplayWords); //Viesti muistutukseksi
   
-  }else if (sensorValue >= thresholdUp){
+  }else if (sensorValue <= thresholdUp){
 
     //Määritetään viesti, kun kasvin tarpeet tyydytetty
     DisplayWords = "Jano sammutettu!";
     Serial.print(DisplayWords);
-  
+    digitalWrite(led, LEDOFF);  //Ledi pois päältä, kun kasvi ei tarvitse vettä
   }else{
 
     Serial.print(DisplayWords);
