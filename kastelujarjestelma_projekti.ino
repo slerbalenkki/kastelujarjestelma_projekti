@@ -10,13 +10,19 @@ int LEDOFF = HIGH;
 int SENON = HIGH;
 int SENOFF = LOW;
 
-int sensorPin = A0;       //Kosteusanturin pinni 
+//int senPlus = 10;
+const int senPlus = 10;   //Kosteusanturin plus-pinnin ulostulo
+int senState = HIGH;
+unsigned long previousMillis = 0;
+const long interval = 5000;
+
+int sensorPin = A0;       //Kosteusanturin 5v sisääntulo 
 int led = 13;             //Ledin pinni
 int thresholdUp = 400;    //Kosteusarvon yläraja -> pumppu kiinni
 int thresholdDown = 250;  //Kosteusarvon alaraja -> pumppu päälle
 int sensorValue;
 
-int senPlus = 10;
+
 
 void setup() {
   Serial.begin(9600); 
@@ -32,10 +38,10 @@ void setup() {
 void Jano(){
     String DisplayWords;
     DisplayWords = "Kasvilla jano!";                             
-    digitalWrite(led, LEDON);   //Ledi päälle
+    /*digitalWrite(led, LEDON);   //Ledi päälle
       delay(500);               //Viive 
     digitalWrite(led, LEDOFF);  //Ledi pois päältä
-      delay(500);               //Viive
+      delay(500);               //Viive*/
     Serial.print(DisplayWords); //Viesti muistutukseksi
     lcd.setCursor(0, 0);
     lcd.print(DisplayWords);
@@ -62,17 +68,11 @@ void
   digitalWrite(senPlus, SENON);
 */  
 
-
-void loop() {
-  
+void anturi(){
   digitalWrite(senPlus, SENOFF);
- 
-  digitalWrite(senPlus, SENON);
-  
-  sensorValue = analogRead(sensorPin);
-  
+  digitalWrite(senPlus, SENON);   
+  sensorValue = analogRead(sensorPin); 
   Serial.println(sensorValue);
-
   if(sensorValue >= thresholdDown){  
     Jano(); 
   }else if (sensorValue <= thresholdUp){
@@ -80,9 +80,24 @@ void loop() {
   }else{
     String DisplayWords;
     Serial.print(DisplayWords);
-        
+  }
+}
+
+
+void loop() {
+  
+  unsigned long currentMillis = millis();
+  if(currentMillis - previousMillis >=interval){
+    previousMillis = currentMillis;
+
+    if(senState == HIGH) {
+      senState = LOW;
+      anturi();
+    }else{
+      senState = HIGH;
+    }
   }
 
-  delay(500); //Viive lukemisen helpottamiseksi
+  //delay(500); //Viive lukemisen helpottamiseksi
   
 }
