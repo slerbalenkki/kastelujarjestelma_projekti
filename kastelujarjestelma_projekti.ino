@@ -69,8 +69,7 @@ void
 */  
 
 void anturi(){
-  digitalWrite(senPlus, SENOFF);
-  digitalWrite(senPlus, SENON);   
+
   sensorValue = analogRead(sensorPin); 
   Serial.println(sensorValue);
   if(sensorValue >= thresholdDown){  
@@ -92,11 +91,15 @@ void loop() {
 
     if(senState == HIGH) {
       senState = LOW;
-      anturi();
+      digitalWrite(senPlus, SENON);
+           
     }else{
+      anturi();
       senState = HIGH;
+      digitalWrite(senPlus, SENOFF);
     }
   }
+  
 
   //delay(500); //Viive lukemisen helpottamiseksi
   
