@@ -14,11 +14,11 @@ int SENOFF = LOW;
 const int senPlus = 10;   //Kosteusanturin plus-pinnin ulostulo
 int senState = HIGH;
 unsigned long previousMillis = 0;
-const long interval = 5000;
+const long interval = 500;
 
 int sensorPin = A0;       //Kosteusanturin 5v sisääntulo 
 int led = 13;             //Ledin pinni
-int thresholdUp = 400;    //Kosteusarvon yläraja -> pumppu kiinni
+int thresholdUp = 300;    //Kosteusarvon yläraja -> pumppu kiinni
 int thresholdDown = 250;  //Kosteusarvon alaraja -> pumppu päälle
 int sensorValue;
 
@@ -37,7 +37,7 @@ void setup() {
 //Määritetään viesti ja vilkku, kun kasvi tarvitsee vettä
 void Jano(){
     String DisplayWords;
-    DisplayWords = "Kasvilla jano!";                             
+    DisplayWords = "Kasvilla jano!  ";                             
     /*digitalWrite(led, LEDON);   //Ledi päälle
       delay(500);               //Viive 
     digitalWrite(led, LEDOFF);  //Ledi pois päältä
@@ -45,6 +45,8 @@ void Jano(){
     Serial.print(DisplayWords); //Viesti muistutukseksi
     lcd.setCursor(0, 0);
     lcd.print(DisplayWords);
+    lcd.setCursor(0, 1);
+    lcd.print("                ");
     lcd.setCursor(0, 1);
     lcd.print(sensorValue);
 }
@@ -59,6 +61,8 @@ void kyllainen(){
     lcd.setCursor(0, 0);
     lcd.print(DisplayWords);
     lcd.setCursor(0, 1);
+    lcd.print("                ");
+    lcd.setCursor(0, 1);
     lcd.print(sensorValue);
 }
 
@@ -72,13 +76,12 @@ void anturi(){
 
   sensorValue = analogRead(sensorPin); 
   Serial.println(sensorValue);
-  if(sensorValue >= thresholdDown){  
+  if(sensorValue >= thresholdUp){  
     Jano(); 
-  }else if (sensorValue <= thresholdUp){
+  }else if (sensorValue <= thresholdDown){
     kyllainen(); 
   }else{
-    String DisplayWords;
-    Serial.print(DisplayWords);
+    kyllainen(); 
   }
 }
 
