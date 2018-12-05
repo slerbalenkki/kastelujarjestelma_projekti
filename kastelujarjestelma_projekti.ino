@@ -18,8 +18,8 @@ const long interval = 500;
 
 int sensorPin = A0;       //Kosteusanturin 5v sisääntulo 
 int led = 13;             //Ledin pinni
-int thresholdUp = 300;    //Kosteusarvon yläraja -> pumppu kiinni
-int thresholdDown = 250;  //Kosteusarvon alaraja -> pumppu päälle
+int thresholdUp = 300;    //Pumppu päälle -> suurempi luku kuivempi maaperä
+int thresholdDown = 250;  //Pumppu kiinni -> pienempi luku märempi maaperä
 int sensorValue;
 
 
